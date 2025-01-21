@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Documentation</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="d-railroad-game-documentation">2D Railroad Game Documentation</h1>
+<h2 id="overview"><strong>1. Overview</strong></h2>
+<h3 id="objective"><strong>Objective</strong></h3>
+<p>The goal of the game is to construct a railroad track path from the starting station to the goal station, ensuring that the rail reaches the destination successfully.</p>
+<h3 id="gameplay"><strong>Gameplay</strong></h3>
+<p>Gameplay revolves around defining the railroad path using a rational B-spline curve. Players can move and adjust control points to shape the curve, with a maximum of 10 control points available. Each control point’s weight can also be altered, allowing for dynamic adjustments. The B-spline curve ensures a smooth path for the train, which must avoid obstacles such as rocks and water scattered across the terrain.</p>
+<h3 id="key-features"><strong>Key Features</strong></h3>
+<ul class="incremental">
+<li><strong>B-Spline Curve</strong>: Provides a smooth, adjustable path for the railroad.</li>
+<li><strong>Procedural Terrain Generation</strong>: Uses Perlin noise for dynamic map creation.</li>
+<li><strong>Train Animation</strong>: Simulates the train moving along the generated track.</li>
+<li><strong>Dynamic Curve Control</strong>: Allows users to interactively place, move, and adjust control points.</li>
+</ul>
+<hr />
+<h2 id="installation-and-setup"><strong>2. Installation and Setup</strong></h2>
+<h3 id="dependencies"><strong>Dependencies</strong></h3>
+<p>The following libraries are required:</p>
+<ul class="incremental">
+<li><code>&lt;GL/glut.h&gt;</code></li>
+<li><code>&lt;GL/glew.h&gt;</code></li>
+<li><code>&quot;GL/glaux.h&quot;</code></li>
+<li><code>&lt;GL/freeglut.h&gt;</code></li>
+<li><code>&lt;GL/freeglut_ext.h&gt;</code></li>
+</ul>
+<h3 id="compilation-instructions"><strong>Compilation Instructions</strong></h3>
+<p>The primary entry point is <code>main.cpp</code>. Ensure all dependent libraries are installed and link them appropriately during compilation.</p>
+<h3 id="configuration-options"><strong>Configuration Options</strong></h3>
+<p>Adjustable parameters include:</p>
+<ul class="incremental">
+<li><strong>Window Dimensions</strong>: Customize the width and height.</li>
+<li><strong>Train Parameters</strong>: Speed and size of the train.</li>
+<li><strong>Terrain Generation</strong>: Grid size for Perlin noise, terrain resolution, scale and obstacle generation.</li>
+<li><strong>Control Points</strong>: Number of control points (minimum 4, maximum 10).</li>
+<li><strong>Path Parameters</strong>: B-spline degree and resolution (points per segment).</li>
+<li><strong>Scoring System</strong>: Adjust scoring weights for distance, smoothness, and control point count.</li>
+</ul>
+<hr />
+<h2 id="gameplay-mechanics"><strong>3. Gameplay Mechanics</strong></h2>
+<h3 id="controls"><strong>Controls</strong></h3>
+<ul class="incremental">
+<li><strong>Right-Click Menu Options</strong>:
+<ul class="incremental">
+<li>Reset the B-spline: Clears the track for a fresh start.</li>
+<li>Define Track: Place and adjust control points.
+<ul class="incremental">
+<li><strong>Control Point Adjustment</strong>:
+<ul class="incremental">
+<li>Drag control points to new positions.</li>
+<li>Press <code>W</code> to increase weight, <code>S</code> to decrease weight, and <code>R</code> to reset weight.</li>
+</ul></li>
+</ul></li>
+<li>Start Train: Initiates the train animation along the generated track.</li>
+<li>Generate New Terrain: Refreshes the terrain with new obstacles.</li>
+<li>Quit: Exits the game.</li>
+</ul></li>
+</ul>
+<h3 id="rules"><strong>Rules</strong></h3>
+<ul class="incremental">
+<li>The starting control point must be located at the start station, and the last control point at the goal station.</li>
+<li>A minimum of 4 and a maximum of 10 control points are allowed.</li>
+<li>The track must avoid all collisions with obstacles.</li>
+</ul>
+<h3 id="scoring-system"><strong>Scoring System</strong></h3>
+<p>The final score is calculated as follows:</p>
+<ol class="incremental" type="1">
+<li><strong>Distance Bonus</strong>: Based on the distance between the start and end stations.</li>
+<li><strong>Control Point Bonus</strong>: Based on the number of control points used.</li>
+<li><strong>Smoothness Bonus</strong>: Based on curve smoothness, calculated using a custom algorithm.</li>
+<li><strong>Total Score</strong>: Sum of the above bonuses.</li>
+</ol>
+<hr />
+<h2 id="architecture-overview"><strong>4. Architecture Overview</strong></h2>
+<h3 id="file-descriptions"><strong>File Descriptions</strong></h3>
+<ul class="incremental">
+<li><strong><code>TerrainGenerator</code></strong>: Handles terrain generation using Perlin noise. Manages terrain textures, obstacle placement, and ensures valid start and end positions.</li>
+<li><strong><code>BSpline</code></strong>:
+<ul class="incremental">
+<li>Manages curve generation, rendering, and train animation.</li>
+<li>Implements collision detection to ensure track validity.</li>
+<li>Inherits from the parent <code>Curve</code> class.</li>
+</ul></li>
+<li><strong><code>Curve</code></strong>: Base class for curve-related operations.</li>
+<li><strong><code>RGBpixmap</code></strong>: Handles texture loading for terrain and train elements.</li>
+<li><strong><code>main.cpp</code></strong>:
+<ul class="incremental">
+<li>Initializes the game, window, and OpenGL settings.</li>
+<li>Handles display and gameplay logic integration.</li>
+</ul></li>
+<li><strong><code>Menu</code></strong>: Implements the right-click menu functionality, allowing players to interact with game options.</li>
+</ul>
+</body>
+</html>
